@@ -5,7 +5,7 @@ import logging
 import re
 from typing import List, Iterable
 
-PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
+PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password', 'ip')
 
 
 def filter_datum(fields: List[str], redaction: str, message: str,
