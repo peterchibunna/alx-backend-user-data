@@ -1,21 +1,27 @@
 #!/usr/bin/env python3
-"""Module 0x00. Personal data
+"""
+Module 0x00. Personal data
 """
 import logging
+import mysql.connector
+import os
 import re
 from typing import List, Iterable
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password',)
 
 
-def filter_datum(fields: List[str], redaction: str, message: str,
-                 separator: str) -> str:
+def filter_datum(
+        fields: List[str], redaction: str, message: str, separator: str
+) -> str:
     """returns message obfuscated"""
     return separator.join([(re.sub(r'(?<==).*$', redaction, i)) if re.match(
         r'^[^=]*', i)[0] in fields else i for i in message.split(separator)])
 
 
 def get_logger() -> logging.Logger:
+    """create and return a logger instance
+    """
     logger = logging.getLogger("get_logger")
     logger.setLevel(logging.INFO)
 
@@ -24,6 +30,20 @@ def get_logger() -> logging.Logger:
     logger.propagate = False
     logger.addHandler(stream_handler)
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """Returns and instance of a database connection
+    """
+    host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = os.getenv("PERSONAL_DATA_DB_NAME", "")
+    db_user = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    db_password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    connection = mysql.connector.connect(
+        host=host, port=3306, user=db_user, password=db_password,
+        database=db_name,
+    )
+    return connection
 
 
 class RedactingFormatter(logging.Formatter):
