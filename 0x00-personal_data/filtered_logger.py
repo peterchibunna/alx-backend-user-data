@@ -3,7 +3,7 @@
 """
 import logging
 import re
-from typing import List
+from typing import List, Iterable
 
 
 def filter_datum(fields: List[str], redaction: str, message: str,
@@ -21,7 +21,7 @@ class RedactingFormatter(logging.Formatter):
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields) -> None:
+    def __init__(self, fields: Iterable) -> None:
         """Initialize the Redacter Formatter
         """
         super(RedactingFormatter, self).__init__(self.FORMAT)
