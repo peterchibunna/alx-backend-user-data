@@ -38,7 +38,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
     db_name = os.getenv("PERSONAL_DATA_DB_NAME", "")
     db_user = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
-    db_password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    db_password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "m!s3rv3R")
     connection = mysql.connector.connect(
         host=host, port=3306, user=db_user, password=db_password,
         database=db_name,
@@ -66,3 +66,28 @@ class RedactingFormatter(logging.Formatter):
         m = super(RedactingFormatter, self).format(record)
         txt = filter_datum(self._fields, self.REDACTION, m, self.SEPARATOR)
         return txt
+
+
+def main() -> None:
+    """This is probably the main thing we have been driving towards
+    """
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users;")
+    formatter = RedactingFormatter(
+        fields=("name", "email", "phone", "ssn", "password"))
+    logger = get_logger()
+
+    for row in cursor:
+        message = ''
+        for item in row:
+            message += '{}={}{}'.format(item, row[item], formatter.SEPARATOR)
+        args = ("user_data", logging.INFO, None, None, message, None, None)
+        record = logging.LogRecord(*args)
+        logger.handle(record)
+    cursor.close()
+    db.close()
+
+
+if __name__ == '__main__':
+    main()
