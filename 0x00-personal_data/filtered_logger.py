@@ -8,8 +8,5 @@ from typing import List
 def filter_datum(fields: List[str], redaction: str, message: str,
                  separator: str) -> str:
     """returns message obfuscated"""
-    string = ''
-    for i in message.split(separator):
-        if re.match(r'^[^=]*', i)[0] in fields:
-            string += (re.sub(r'(?<==).*$', redaction, i))
-    return string
+    return separator.join([(re.sub(r'(?<==).*$', redaction, i)) if re.match(
+        r'^[^=]*', i)[0] in fields else i for i in message.split(separator)])
