@@ -5,7 +5,7 @@ import logging
 import re
 from typing import List, Iterable
 
-PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'ip',)
+PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'ip')
 
 
 def filter_datum(fields: List[str], redaction: str, message: str,
@@ -16,14 +16,14 @@ def filter_datum(fields: List[str], redaction: str, message: str,
 
 
 def get_logger() -> logging.Logger:
-    _logger = logging.getLogger("get_logger")
-    _logger.setLevel(logging.INFO)
+    logger = logging.getLogger("get_logger")
+    logger.setLevel(logging.INFO)
 
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(RedactingFormatter(PII_FIELDS))
-
-    _logger.addHandler(stream_handler)
-    return _logger
+    logger.propagate = False
+    logger.addHandler(stream_handler)
+    return logger
 
 
 class RedactingFormatter(logging.Formatter):
