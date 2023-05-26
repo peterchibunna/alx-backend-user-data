@@ -6,7 +6,7 @@ import logging
 import mysql.connector
 import os
 import re
-from typing import List, Iterable
+from typing import List
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password',)
 
@@ -54,7 +54,7 @@ class RedactingFormatter(logging.Formatter):
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields: Iterable) -> None:
+    def __init__(self, fields: List[str]):
         """Initialize the Redacter Formatter
         """
         super(RedactingFormatter, self).__init__(self.FORMAT)
