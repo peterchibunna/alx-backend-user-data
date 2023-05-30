@@ -6,7 +6,7 @@ from models.user import User
 from typing import List, TypeVar
 
 
-def pathify(path):
+def pathify(path: str) -> str:
     """Returns a correctly slashed pathname
     """
     return path if path.endswith('/') else '{}/'.format(path)
@@ -28,7 +28,9 @@ class Auth:
     def authorization_header(self, request=None) -> str:
         """This should be the header?
         """
-        return None
+        if request is None:
+            return None
+        return request.headers.get('Authorization', None)
 
     def current_user(self, request=None) -> TypeVar('User'):
         """Returns the current user of the request?
