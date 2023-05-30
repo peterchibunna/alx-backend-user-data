@@ -26,7 +26,7 @@ class Auth:
         if pathify(path) in excluded_paths:
             return False
         for i in excluded_paths:
-            if re.match(i.replace('*', '\w+'), pathify(path)) is not None:
+            if re.match(i.replace('*', '.*'), path) is not None:
                 return False
         return True
 
