@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """The Auth: class
 """
+import re
+
 from flask import request
 from models.user import User
 from typing import List, TypeVar
@@ -23,6 +25,9 @@ class Auth:
             return True
         if pathify(path) in excluded_paths:
             return False
+        for i in excluded_paths:
+            if re.match(i.replace('*', '\w+'), pathify(path)) is not None:
+                return False
         return True
 
     def authorization_header(self, request=None) -> str:
