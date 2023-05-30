@@ -36,7 +36,20 @@ class BasicAuth(Auth):
         if type(base64_authorization_header) != str:
             return None
         try:
-            return base64.b64decode(base64_authorization_header,
-                                    validate=True).decode('utf-8')
+            return base64.b64decode(
+                base64_authorization_header, validate=True).decode('utf-8')
         except Exception:
             return None
+
+    def extract_user_credentials(
+            self, decoded_base64_authorization_header: str) -> (str, str):
+        """9. Basic - User credentials
+        """
+        if decoded_base64_authorization_header is None:
+            return (None, None,)
+        if type(decoded_base64_authorization_header) != str:
+            return (None, None,)
+        a = decoded_base64_authorization_header.split(":")
+        if len(a) != 2:
+            return (None, None,)
+        return tuple(a)
