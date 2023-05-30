@@ -51,7 +51,8 @@ class BasicAuth(Auth):
             return (None, None,)
         if type(decoded_base64_authorization_header) != str:
             return (None, None,)
-        a = decoded_base64_authorization_header.split(":")
+        a = decoded_base64_authorization_header.split(":", 1)
+        # must split into 2 and gather the rest into a string block
         if len(a) != 2:
             return (None, None,)
         return tuple(a)
