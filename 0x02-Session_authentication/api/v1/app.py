@@ -45,7 +45,9 @@ def forbidden(error) -> str:
     return jsonify({"error": "Forbidden"}), 403
 
 
-a, b, c = '/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/'
+a, b, c, d = '/api/v1/status/', '/api/v1/unauthorized/', \
+    '/api/v1/forbidden/', \
+    '/api/v1/auth_session/login/'
 
 
 @app.before_request
@@ -53,11 +55,12 @@ def check_authentication():
     """Check if we must require authentication for a user or not
     """
     if auth is not None:
-        if auth.require_auth(request.path, [a, b, c]):
+        if auth.require_auth(request.path, [a, b, c, d]):
             auth_header = auth.authorization_header(request)
             user = auth.current_user(request)
+            cookie = auth.session_cookie(request)
             request.current_user = user
-            if auth_header is None:
+            if auth_header is None and cookie is None:
                 abort(401)
             if user is None:
                 abort(403)
