@@ -6,6 +6,7 @@ from typing import Tuple
 from flask import abort, jsonify, request
 
 from models.user import User
+from models.user_session import UserSession
 from api.v1.views import app_views
 
 

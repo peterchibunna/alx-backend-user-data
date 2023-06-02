@@ -127,7 +127,6 @@ class Base():
         """
         s_class = cls.__name__
         def _search(obj):
-            print('::::::::::::::::', attributes)
             if len(attributes) == 0:
                 return True
             for k, v in attributes.items():
