@@ -58,10 +58,8 @@ class DB:
                 attributes[key] = value
             else:
                 raise InvalidRequestError()
-        results = self._session.query(User).filter_by(**attributes)
-        if results.count() == 0:
-            raise NoResultFound()
+        result = self._session.query(User).filter_by(**attributes).first()
 
-        if results.first() is None:
+        if result is None:
             raise NoResultFound()
-        return results.first()
+        return result
