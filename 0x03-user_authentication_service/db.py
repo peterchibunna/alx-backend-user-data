@@ -30,14 +30,14 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str, hashed_password: str) -> User:
+    def add_user(self, email: str, hashed_password: str) -> User | None:
         """Adds and returns the added User
         """
         try:
             u = User(email=email, hashed_password=hashed_password)
             self._session.add(u)
             self._session.commit()
+            return u
         except Exception:
             self._session.rollback()
-            u = None
-        return u
+            return None
