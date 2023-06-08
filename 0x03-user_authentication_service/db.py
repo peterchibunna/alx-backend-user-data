@@ -8,6 +8,12 @@ from sqlalchemy.orm.session import Session
 
 from user import Base, User
 
+import logging
+
+logging.basicConfig()
+logging.getLogger('sqlalchemy').setLevel(logging.ERROR)
+logging.disable(logging.WARNING)
+
 
 class DB:
     """DB class
@@ -30,7 +36,7 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str, hashed_password: str) -> User | None:
+    def add_user(self, email: str, hashed_password: str) -> User:
         """Adds and returns the added User
         """
         try:
