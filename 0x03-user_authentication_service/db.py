@@ -48,7 +48,6 @@ class DB:
             self._session.commit()
             return u
         except Exception:
-            print('**************exception***********')
             self._session.rollback()
             return None
 
