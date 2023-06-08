@@ -5,7 +5,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-from sqlalchemy.exc import InvalidRequestError, NoResultFound
+# from sqlalchemy.exc import InvalidRequestError, NoResultFound
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 
 from user import Base, User
 
@@ -58,6 +60,7 @@ class DB:
                 attributes[key] = value
             else:
                 raise InvalidRequestError()
+
         result = self._session.query(User).filter_by(**attributes).first()
 
         if result is None:
