@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy import exc as exception
 
 from user import Base, User
 
@@ -47,3 +48,18 @@ class DB:
         except Exception:
             self._session.rollback()
             return None
+
+    def find_user_by(self, **kwargs) -> User:
+        """Finds a user
+        """
+        attributes = {}
+        for key, value in kwargs.items():
+            if hasattr(User, key):
+                attributes[key] = value
+            else:
+                raise exception.InvalidRequestError()
+
+        result = self._session.query(User).filter_by(**attributes).first()
+        if result is None:
+            raise exception.NoResultFound()
+        return result
