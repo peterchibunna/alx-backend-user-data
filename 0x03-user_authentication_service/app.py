@@ -2,14 +2,11 @@
 """Module:
 Flask Application
 """
-from typing import Any, Tuple
+# from typing import Any, Tuple
 
-from auth import Auth
 from flask import Flask, jsonify, request, abort, redirect
 
 app = Flask(__name__)
-
-AUTH = Auth()
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
@@ -20,9 +17,11 @@ def bienvenue() -> str:
 
 
 @app.route('/users', methods=['POST'], strict_slashes=False)
-def post_users() -> tuple[Any, int] | Any:
+def post_users() -> str:
     """Register user route
     """
+    from auth import Auth
+    AUTH = Auth()
     email = request.form.get("email")
     password = request.form.get("password")
     try:
