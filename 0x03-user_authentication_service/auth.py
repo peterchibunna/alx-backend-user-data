@@ -117,5 +117,6 @@ class Auth:
                 user.id,
                 hashed_password=new_password_hash,
                 reset_token=None)
+            return None
         except NoResultFound:
             raise ValueError()
